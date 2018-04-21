@@ -2,16 +2,8 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
 from .models import Website, WebPage, WebsiteCategory
 from django.db.models import Q
-from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework import viewsets
-from .forms import WebsiteForm
+from django.urls import reverse_lazy
 
-
-# class Websites(viewsets.ModelViewSet):
-#     queryset = Website.objects.all()
-#     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-#     filter_fields = ('category')
-#     ordering = ('title')
 
 class Websites(ListView):
     model = Website
@@ -71,21 +63,40 @@ class WebsitesDetailView(DetailView):
 class CreateWebsite(CreateView):
     model = Website
     fields = '__all__'
+    initial = {'date_added': '2018-04-21', 'date_updated': '2018-04-21'}
     template_name = "website_create.html"
+    success_url = reverse_lazy('websites')
 
 
 class CreateWebPage(CreateView):
     model = WebPage
     fields = '__all__'
+    initial = {'date_added': '2018-04-21', 'date_updated': '2018-04-21'}
     template_name = "webpage_create.html"
+    success_url = reverse_lazy('websites')
 
 
 class CategoriesList(ListView):
     model = WebsiteCategory
     template_name = "website_category.html"
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        self.get_count()
+        return data
+
+    @staticmethod
+    def get_count():
+        categories = WebsiteCategory.objects.all()
+        for category in categories:
+            count = Website.objects.filter(category=category).count()
+            category.count = count
+            category.save()
+
 
 class CreateCategory(CreateView):
     model = WebsiteCategory
     fields = '__all__'
+    initial = {'date_added': '2018-04-21', 'date_updated': '2018-04-21'}
     template_name = "category_create.html"
+    success_url = reverse_lazy('categories')
