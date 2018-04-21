@@ -11,6 +11,12 @@
         <a href="{{ website.get_absolute_url }}">{{ website.title }}</a>
       </li>
       {% endfor %}
+      <br>
+      <p>Filter by category:</p>
+
+      {% for category in categories %}
+        <a href="?q={{category.id}}">{{ category }}</a>
+      {% endfor %}
 
     </ul>
     {% else %}
