@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Websites list</h1>
+
+    {% if website_list %}
+    <ul>
+
+      {% for website in website_list %}
+      <li>
+        <a href="{{ website.get_absolute_url }}">{{ website.title }}</a>
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>There are no websites</p>
+    {% endif %}
+
+    <a href="{% url 'create-website' %}">Create website</a>
+    <a href="{% url 'create-webpage' %}">Create webpage</a>
+{% endblock %}

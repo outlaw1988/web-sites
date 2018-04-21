@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Title: {{ website.title }}</h1>
+
+  <p><strong>url:</strong> {{ website.url }} </p>
+  <p><strong>Meta description:</strong> {{ website.meta_description }}</p>
+  <p><strong>Alexa rank:</strong> {{ website.alexa_rank }}</p>
+  <p><strong>Category:</strong> {{ website.category }}</p>
+  <p><strong>Date added:</strong> {{ website.date_added }}</p>
+  <p><strong>Date updated:</strong> {{ website.date_updated }}</p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Web pages</h4>
+
+    {% for web_page in website.webpage_set.all %}
+      <hr>
+      <p><strong>Title:</strong> {{web_page.title}}</p>
+      <p><strong>Url:</strong> {{web_page.url}}</p>
+      <p><strong>Date added:</strong> {{web_page.date_added}}</p>
+      <p><strong>Date updated:</strong> {{web_page.date_updated}}</p>
+      <p><strong>Meta description:</strong> {{web_page.meta_description}}</p>
+    {% endfor %}
+  </div>
+
+{% endblock %}
