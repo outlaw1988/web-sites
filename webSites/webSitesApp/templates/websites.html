@@ -9,6 +9,7 @@
       {% for website in website_list %}
       <li>
         <a href="{{ website.get_absolute_url }}">{{ website.title }}</a>
+        <a>category: {{ website.category }}</a>
       </li>
       {% endfor %}
       <br>

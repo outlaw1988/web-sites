@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 
 
 class Websites(ListView):
+    # TODO Sorting + filtering together, sessions?
     model = Website
     template_name = "websites.html"
 
@@ -20,10 +21,17 @@ class Websites(ListView):
     def get_queryset(self):
         if "category" in self.kwargs:
             category = WebsiteCategory.objects.filter(name=self.kwargs['category'])[0]
+            self.request.session['category'] = category.name
             return Website.objects.filter(category=category)
         if "ordering" in self.kwargs:
-            return Website.objects.all().order_by(self.kwargs['ordering'])
+            if self.request.session['category'] == "all":
+                return Website.objects.all().order_by(self.kwargs['ordering'])
+            else:
+                category_name = self.request.session['category']
+                category = WebsiteCategory.objects.filter(name=category_name)[0]
+                return Website.objects.filter(category=category).order_by(self.kwargs['ordering'])
         else:
+            self.request.session['category'] = "all"
             return Website.objects.all()
 
 
