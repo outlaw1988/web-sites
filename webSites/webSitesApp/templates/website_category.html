@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Categories list</h1>
+
+    {% if websitecategory_list %}
+    <ul>
+
+      {% for category in websitecategory_list %}
+      <li>
+        <strong>{{ category.name }}</strong> <br>
+        Description: {{ category.description }} <br>
+        Date added: {{ category.date_added }} <br>
+        Date updated: {{ category.date_updated }} <br>
+        Count: {{  category.count }}
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>There are no categories</p>
+    {% endif %}
+
+    <a href="{% url 'create-category' %}">Create category</a>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Website,WebPage
+from .models import Website, WebPage, WebsiteCategory
 
 
 class Websites(ListView):
@@ -23,3 +23,14 @@ class CreateWebPage(CreateView):
     model = WebPage
     fields = '__all__'
     template_name = "webpage_create.html"
+
+
+class CategoriesList(ListView):
+    model = WebsiteCategory
+    template_name = "website_category.html"
+
+
+class CreateCategory(CreateView):
+    model = WebsiteCategory
+    fields = '__all__'
+    template_name = "category_create.html"
