@@ -28,6 +28,9 @@ class WebsiteCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def get_filter(self):
+        return reverse('websites-cat', args=[str(self.name)])
+
 
 class WebPage(models.Model):
     website = models.ForeignKey('Website', on_delete=models.SET_NULL, null=True)

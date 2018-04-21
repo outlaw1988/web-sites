@@ -17,6 +17,14 @@ class Websites(ListView):
     model = Website
     template_name = "websites.html"
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        categories = WebsiteCategory.objects.all()
+        data['categories'] = categories
+        field_names = ['url', 'title', 'date_added', 'date_updated']
+        data['field_names'] = field_names
+        return data
+
     def get_queryset(self):
         if "category" in self.kwargs:
             category = WebsiteCategory.objects.filter(name=self.kwargs['category'])[0]
