@@ -4,14 +4,46 @@
     <h1>Websites list</h1>
 
     {% if website_list %}
-    <ul>
 
-      {% for website in website_list %}
-      <li>
-        <a href="{{ website.get_absolute_url }}">{{ website.title }}</a>
-        <a>category: {{ website.category }}</a>
-      </li>
-      {% endfor %}
+      <table class="table">
+        <tr>
+          <th>
+            <a href="{% url 'website-ord' 'title' %}">Title</a>
+          </th>
+          <th>
+            <a href="{% url 'website-ord' 'url' %}">Url</a>
+          </th>
+          <th>
+            <a href="{% url 'website-ord' 'category' %}">Category</a>
+          </th>
+          <th>
+            <a href="{% url 'website-ord' 'date_added' %}">Date added</a>
+          </th>
+          <th>
+            <a href="{% url 'website-ord' 'date_updated' %}">Date updated</a>
+          </th>
+        </tr>
+        {% for website in website_list %}
+          <tr>
+            <td>
+              <a href="{{ website.get_absolute_url }}">{{ website.title }}</a>
+            </td>
+            <td>
+              {{ website.url }}
+            </td>
+            <td>
+              {{ website.category }}
+            </td>
+            <td>
+              {{ website.date_added }}
+            </td>
+            <td>
+              {{ website.date_updated }}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+
       <br>
       <p>Filter by category:</p>
 
@@ -24,16 +56,7 @@
       </select>​
 
       <br><br>
-      <p>Order by:</p>
 
-      <select onchange="location = this.options[this.selectedIndex].value;">
-        <option>Please select</option>
-        {% for field in field_names %}
-          <option value="{% url 'website-ord' field %}">{{field}}</option>
-        {% endfor %}
-      </select>
-
-    </ul>
     {% else %}
       <p>There are no websites</p>
     {% endif %}
