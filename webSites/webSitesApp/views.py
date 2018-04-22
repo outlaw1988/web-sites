@@ -3,10 +3,11 @@ from django.views.generic import ListView, DetailView, CreateView
 from .models import Website, WebPage, WebsiteCategory
 from django.db.models import Q
 from django.urls import reverse_lazy
+import datetime
 
 
 class Websites(ListView):
-    # TODO Sorting + filtering together, sessions?
+    # TODO Q or other library to make filtering and sorting
     model = Website
     template_name = "websites.html"
 
@@ -71,7 +72,9 @@ class WebsitesDetailView(DetailView):
 class CreateWebsite(CreateView):
     model = Website
     fields = '__all__'
-    initial = {'date_added': '2018-04-21', 'date_updated': '2018-04-21'}
+    now = datetime.datetime.now()
+    today = "{}-{}-{}".format(now.year, now.month, now.day)
+    initial = {'date_added': today, 'date_updated': today}
     template_name = "website_create.html"
     success_url = reverse_lazy('websites')
 
@@ -79,7 +82,9 @@ class CreateWebsite(CreateView):
 class CreateWebPage(CreateView):
     model = WebPage
     fields = '__all__'
-    initial = {'date_added': '2018-04-21', 'date_updated': '2018-04-21'}
+    now = datetime.datetime.now()
+    today = "{}-{}-{}".format(now.year, now.month, now.day)
+    initial = {'date_added': today, 'date_updated': today}
     template_name = "webpage_create.html"
     success_url = reverse_lazy('websites')
 
@@ -105,6 +110,8 @@ class CategoriesList(ListView):
 class CreateCategory(CreateView):
     model = WebsiteCategory
     fields = '__all__'
-    initial = {'date_added': '2018-04-21', 'date_updated': '2018-04-21'}
+    now = datetime.datetime.now()
+    today = "{}-{}-{}".format(now.year, now.month, now.day)
+    initial = {'date_added': today, 'date_updated': today}
     template_name = "category_create.html"
     success_url = reverse_lazy('categories')
