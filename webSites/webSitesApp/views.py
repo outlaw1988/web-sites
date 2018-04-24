@@ -1,13 +1,11 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
 from .models import Website, WebPage, WebsiteCategory
-from django.db.models import Q
 from django.urls import reverse_lazy
 import datetime
+from webSites.tasks import *
 
 
 class Websites(ListView):
-    # TODO Q or other library to make filtering and sorting
     model = Website
     template_name = "websites.html"
 
@@ -33,35 +31,7 @@ class Websites(ListView):
                 return Website.objects.filter(category=category).order_by(self.kwargs['ordering'])
         else:
             self.request.session['category'] = "all"
-            return Website.objects.all()
-
-
-# class Websites(ListView):
-#     model = Website
-#     template_name = "websites.html"
-#     filter_backends = [SearchFilter, OrderingFilter]
-#     search_fields = ['title', 'category']
-#
-#     # def get_context_data(self, **kwargs):
-#     #     website_list = Website.objects.all()
-#     #     categories = WebsiteCategory.objects.all()
-#     #     context = {
-#     #         'website_list': website_list,
-#     #         'categories': categories,
-#     #     }
-#     #     return context
-#
-#     def get_queryset(self, *args, **kwargs):
-#         queryset_list = Website.objects.all()
-#         query = self.request.GET.get("q")
-#         if query:
-#             queryset_list = queryset_list.filter(
-#                 Q(category=query)).distinct()
-#         return queryset_list
-#
-#     # def get_queryset(self):
-#     #     category = WebsiteCategory.objects.filter(id=1)[0]
-#     #     return Website.objects.filter(category=category)
+            return Website.objects.all()[:10]
 
 
 class WebsitesDetailView(DetailView):
@@ -115,3 +85,16 @@ class CreateCategory(CreateView):
     initial = {'date_added': today, 'date_updated': today}
     template_name = "category_create.html"
     success_url = reverse_lazy('categories')
+
+
+class DownloadWebsites(ListView):
+    template_name = "download_websites.html"
+    model = Website
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        url = "http://s3.amazonaws.com/alexa-static/top-1m.csv.zip"
+        out_path = "webSitesApp/static/"
+        result = download_file.delay(url, out_path)
+        #result = download_file.apply_async(url)
+        return data

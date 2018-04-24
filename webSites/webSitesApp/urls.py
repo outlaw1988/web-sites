@@ -10,5 +10,6 @@ urlpatterns = [
     path('create_website/', views.CreateWebsite.as_view(), name='create-website'),
     path('create_webpage/', views.CreateWebPage.as_view(), name='create-webpage'),
     path('categories/', views.CategoriesList.as_view(), name='categories'),
-    path('create_category/', views.CreateCategory.as_view(), name='create-category')
+    path('create_category/', views.CreateCategory.as_view(), name='create-category'),
+    path('download_websites/', views.DownloadWebsites.as_view(), name='download-websites')
 ]
